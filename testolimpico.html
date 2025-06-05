@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sala equipamiento deportivo</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #12c2e9, #c471ed, #f64f59);
+            color: #333;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .olympic-rings {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+        
+        .ring {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 4px solid;
+            margin: 0 -5px;
+        }
+        
+        .blue { border-color: #0085C7; }
+        .yellow { border-color: #F4C300; }
+        .black { border-color: #000000; }
+        .green { border-color: #009F3D; }
+        .red { border-color: #DF0024; }
+        
+        #quiz-container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            max-width: 700px;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #quiz-container:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background: linear-gradient(to right, #0085C7, #F4C300, #000000, #009F3D, #DF0024);
+        }
+        
+        h1 {
+            color: #0066cc;
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 2.2em;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #777;
+            margin-bottom: 25px;
+            font-size: 1.1em;
+        }
+        
+        .question {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-left: 8px solid #ddd;
+        }
+        
+        .question:nth-child(1) { border-color: #0085C7; }
+        .question:nth-child(2) { border-color: #F4C300; }
+        .question:nth-child(3) { border-color: #000000; }
+        .question:nth-child(4) { border-color: #DF0024; }
+        
+        .question p {
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            color: #333;
+        }
+        
+        .pictogram-container {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .options {
+            margin-top: 15px;
+        }
+        
+        .option-label {
+            display: block;
+            margin-bottom: 10px;
+            cursor: pointer;
+            padding: 10px 15px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            background-color: #f2f2f2;
+            border: 2px solid #e0e0e0;
+        }
+        
+        .option-label:hover {
+            background-color: #e6f2ff;
+            border-color: #99ccff;
+        }
+        
+        input[type="radio"] {
+            display: none;
+        }
+        
+        input[type="radio"] + span {
+            position: relative;
+            padding-left: 30px;
+            display: inline-block;
+        }
+        
+        input[type="radio"] + span:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid #ccc;
+            background-color: white;
+            transition: all 0.2s ease;
+        }
+        
+        input[type="radio"]:checked + span:before {
+            border-color: #0066cc;
+            background-color: #0066cc;
+        }
+        
+        input[type="radio"]:checked + span:after {
+            content: '';
+            position: absolute;
+            left: 7px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: white;
+        }
+        
+        #submit-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #fff;
+            background: linear-gradient(to right, #00b09b, #96c93d);
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            font-family: 'Roboto', sans-serif;
+        }
+        
+        #submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(0,0,0,0.15);
+        }
+        
+        #result {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.2em;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 2px solid #c3e6cb;
+        }
+        
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 2px solid #f5c6cb;
+        }
+        
+        #result strong {
+            color: #d9534f;
+            font-size: 1.3em;
+            text-decoration: underline;
+        }
+        
+        .progress-container {
+            width: 100%;
+            background-color: #f1f1f1;
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        #progress-bar {
+            height: 20px;
+            background: linear-gradient(to right, #0085C7, #F4C300, #000000, #009F3D, #DF0024);
+            width: 0%;
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            #quiz-container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            .question {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="quiz-container">
+        <div class="olympic-rings">
+            <div class="ring blue"></div>
+            <div class="ring black"></div>
+            <div class="ring red"></div>
+            <div class="ring yellow"></div>
+            <div class="ring green"></div>
+        </div>
+        
+        <h1>🏆 Sala equipamiento deportivo 🏆</h1>
+        <p class="subtitle">¡Demuestra tus conocimientos sobre los Juegos Olímpicos para descubrir la ubicación secreta del nuevo código!</p>
+        
+        <div class="progress-container">
+            <div id="progress-bar"></div>
+        </div>
+        
+        <form id="quiz-form">
+            <div class="question" id="q1">
+                <p>1. Identifica este deporte olímpico:</p>
+                <div class="pictogram-container">
+                    <svg width="100" height="100" viewBox="0 0 100 100" fill="none">
+                        <circle cx="50" cy="50" r="40" stroke="#0085C7" stroke-width="4" fill="none"/>
+                        <circle cx="50" cy="50" r="30" stroke="#0085C7" stroke-width="2" fill="none"/>
+                        <circle cx="50" cy="50" r="20" stroke="#0085C7" stroke-width="2" fill="none"/>
+                        <circle cx="50" cy="50" r="10" stroke="#0085C7" stroke-width="2" fill="none"/>
+                        <line x1="20" y1="50" x2="80" y2="50" stroke="#0085C7" stroke-width="2"/>
+                        <line x1="50" y1="20" x2="50" y2="80" stroke="#0085C7" stroke-width="2"/>
+                        <path d="M10 50 L40 50 M50 10 L50 40" stroke="#0085C7" stroke-width="6" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <div class="options">
+                    <label class="option-label">
+                        <input type="radio" name="q1" value="a">
+                        <span>🏹 Lanzamiento de Jabalina</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q1" value="b">
+                        <span>⚔️ Esgrima</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q1" value="c">
+                        <span>🎯 Tiro con Arco</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q1" value="d">
+                        <span>🏋️ Halterofilia</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question" id="q2">
+                <p>2. ¿Cuántos jugadores componen un equipo de Voleibol Playa en los Juegos Olímpicos?</p>
+                <div class="pictogram-container">
+                    <svg width="100" height="100" viewBox="0 0 100 100" fill="none">
+                        <rect x="5" y="70" width="90" height="5" fill="#F4C300"/>
+                        <circle cx="30" cy="50" r="15" stroke="#F4C300" stroke-width="4" fill="none"/>
+                        <circle cx="70" cy="50" r="15" stroke="#F4C300" stroke-width="4" fill="none"/>
+                        <path d="M30 35 L30 20 Q30 15 35 15 L65 15 Q70 15 70 20 L70 35" stroke="#F4C300" stroke-width="4" fill="none"/>
+                        <line x1="30" y1="65" x2="30" y2="72" stroke="#F4C300" stroke-width="4"/>
+                        <line x1="70" y1="65" x2="70" y2="72" stroke="#F4C300" stroke-width="4"/>
+                    </svg>
+                </div>
+                <div class="options">
+                    <label class="option-label">
+                        <input type="radio" name="q2" value="a">
+                        <span>6️⃣ 6 jugadores</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q2" value="b">
+                        <span>2️⃣ 2 jugadores</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q2" value="c">
+                        <span>4️⃣ 4 jugadores</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q2" value="d">
+                        <span>5️⃣ 5 jugadores</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question" id="q3">
+                <p>3. ¿Qué tipo de medalla se otorga al atleta o equipo que queda en tercer lugar?</p>
+                <div class="options">
+                    <label class="option-label">
+                        <input type="radio" name="q3" value="a">
+                        <span>🥉 Medalla de Bronce</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q3" value="b">
+                        <span>🥈 Medalla de Plata</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q3" value="c">
+                        <span>🥇 Medalla de Oro</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q3" value="d">
+                        <span>🔶 Medalla de Cobre</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question" id="q4">
+                <p>4. ¿Qué deporte representa este pictograma?</p>
+                <div class="pictogram-container">
+                    <svg width="100" height="100" viewBox="0 0 100 100" fill="none">
+                        <path d="M20 40 Q25 30 35 35 Q45 40 55 35 Q65 30 75 35 Q85 40 90 30" stroke="#DF0024" stroke-width="4" fill="none"/>
+                        <path d="M20 60 Q25 50 35 55 Q45 60 55 55 Q65 50 75 55 Q85 60 90 50" stroke="#DF0024" stroke-width="4" fill="none"/>
+                        <circle cx="25" cy="20" r="10" fill="#DF0024"/>
+                    </svg>
+                </div>
+                <div class="options">
+                    <label class="option-label">
+                        <input type="radio" name="q4" value="a">
+                        <span>🚣 Remo</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q4" value="b">
+                        <span>🤽 Waterpolo</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q4" value="c">
+                        <span>⛵ Vela</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q4" value="d">
+                        <span>🏊 Natación</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question" id="q5">
+                <p>5. ¿Cuál de estos deportes NO forma parte de los Juegos Olímpicos de Verano?</p>
+                <div class="options">
+                    <label class="option-label">
+                        <input type="radio" name="q5" value="a">
+                        <span>🏀 Baloncesto</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q5" value="b">
+                        <span>🏈 Fútbol Americano</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q5" value="c">
+                        <span>🏐 Voleibol</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q5" value="d">
+                        <span>🏓 Tenis de Mesa</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question" id="q6">
+                <p>6. ¿Qué representan los cinco aros olímpicos?</p>
+                <div class="pictogram-container">
+                    <div class="olympic-rings" style="margin: 0;">
+                        <div class="ring blue"></div>
+                        <div class="ring black"></div>
+                        <div class="ring red"></div>
+                        <div class="ring yellow"></div>
+                        <div class="ring green"></div>
+                    </div>
+                </div>
+                <div class="options">
+                    <label class="option-label">
+                        <input type="radio" name="q6" value="a">
+                        <span>🌍 Los cinco continentes</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q6" value="b">
+                        <span>🏅 Los cinco tipos de medallas</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q6" value="c">
+                        <span>🥇 Los cinco primeros países ganadores</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q6" value="d">
+                        <span>🏆 Los cinco valores olímpicos</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question" id="q7">
+                <p>7. ¿En qué ciudad se celebraron los primeros Juegos Olímpicos modernos?</p>
+                <div class="options">
+                    <label class="option-label">
+                        <input type="radio" name="q7" value="a">
+                        <span>🇬🇷 Atenas</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q7" value="b">
+                        <span>🇫🇷 París</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q7" value="c">
+                        <span>🇬🇧 Londres</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="q7" value="d">
+                        <span>🇺🇸 Los Ángeles</span>
+                    </label>
+                </div>
+            </div>
+
+            <button type="button" id="submit-btn">¡VERIFICAR RESPUESTAS!</button>
+        </form>
+
+        <div id="result" style="display: none;"></div>
+    </div>
+
+    <script>
+        // Actualizar barra de progreso
+        function updateProgressBar() {
+            const form = document.getElementById('quiz-form');
+            const totalQuestions = 7;
+            let answeredQuestions = 0;
+            
+            for (let i = 1; i <= totalQuestions; i++) {
+                if (form.querySelector(`input[name="q${i}"]:checked`)) {
+                    answeredQuestions++;
+                }
+            }
+            
+            const progressPercentage = (answeredQuestions / totalQuestions) * 100;
+            document.getElementById('progress-bar').style.width = progressPercentage + '%';
+        }
+
+        // Agregar eventos para la barra de progreso
+        document.querySelectorAll('input[type="radio"]').forEach(radio => {
+            radio.addEventListener('change', updateProgressBar);
+        });
+
+        // Definir las respuestas correctas
+        const correctAnswers = {
+            q1: 'c', // Tiro con Arco
+            q2: 'b', // 2 jugadores
+            q3: 'a', // Bronce
+            q4: 'd', // Natación
+            q5: 'b', // Fútbol Americano no es olímpico
+            q6: 'a', // Los cinco continentes
+            q7: 'a'  // Atenas
+        };
+
+        // Mensajes
+        const mensajeExito = "¡Enhorabuena! Acceso concedido. Lo que buscáis lo encontraréis en algún lugar de la mesa que estáis usando...";
+        const mensajeError = "¡Oops! Algunas respuestas no son correctas. ¡Revisa tus conocimientos olímpicos e inténtalo de nuevo!";
+        const mensajeIncompleto = "¡Alto ahí, atleta! No todas las preguntas han sido respondidas. ¡Completa el test para descubrir el código secreto!";
+
+        // Verificar respuestas al hacer clic en el botón
+        document.getElementById('submit-btn').addEventListener('click', function() {
+            let allCorrect = true;
+            let allAnswered = true;
+            
+            // Verificar cada pregunta
+            for (const questionName in correctAnswers) {
+                const selectedOption = document.querySelector(`input[name="${questionName}"]:checked`);
+                const questionElement = document.getElementById(questionName);
+                
+                if (selectedOption) {
+                    // Comprueba si la respuesta es correcta
+                    if (selectedOption.value !== correctAnswers[questionName]) {
+                        allCorrect = false;
+                        questionElement.style.borderLeft = '8px solid #DF0024'; // Marca en rojo las incorrectas
+                    } else {
+                        questionElement.style.borderLeft = '8px solid #009F3D'; // Marca en verde las correctas
+                    }
+                } else {
+                    allAnswered = false;
+                    questionElement.style.borderLeft = '8px solid #F4C300'; // Marca en amarillo las no respondidas
+                }
+            }
+
+            // Muestra el div de resultado
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+
+            // Decide qué mensaje mostrar
+            if (!allAnswered) {
+                resultDiv.textContent = mensajeIncompleto;
+                resultDiv.className = 'error';
+            } else if (allCorrect) {
+                resultDiv.innerHTML = mensajeExito;
+                resultDiv.className = 'success';
+            } else {
+                resultDiv.textContent = mensajeError;
+                resultDiv.className = 'error';
+            }
+            
+            // Scroll hasta el resultado
+            resultDiv.scrollIntoView({ behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>
