@@ -1,0 +1,972 @@
+    <!-- Panel de información -->
+    <div class="info-panel">
+        <div class="info-card">
+            <h3>👤 Guardián</h3>
+            <div class="value" id="player-name">Ciber-Héroe</div>
+        </div>
+        <div class="info-card">
+            <h3>📍 Posición</h3>
+            <div class="value" id="player-position">1</div>
+        </div>
+        <div class="info-card">
+            <h3>🏆 Puntos</h3>
+            <div class="value" id="player-score">0</div>
+        </div>
+        <div class="info-card">
+            <h3>🛡️ Nivel</h3>
+            <div class="value" id="security-level">Novato</div>
+        </div>
+    </div>
+
+    <!-- Tablero de juego -->
+    <div class="game-board">
+        <!-- Contenedor del dado -->
+        <div class="dice-container" id="dice-container">
+            <div class="dice" id="dice">?</div>
+            <button class="dice-btn" id="roll-dice-btn" disabled>🎲 Lanzar Dado</button>
+        </div>
+
+        <!-- Zonas cibernéticas -->
+        <div class="cyber-zones">
+            <div class="zone">🔐 Contraseñas<br>Seguras</div>
+            <div class="zone">👥 Privacidad<br>Personal</div>
+            <div class="zone">🌐 Navegación<br>Segura</div>
+            <div class="zone">📱 Redes<br>Sociales</div>
+            <div class="zone">📧 Email &<br>Phishing</div>
+            <div class="zone">🎮 Gaming<br>Responsable</div>
+        </div>
+
+        <!-- Tablero de casillas -->
+        <div class="board-path" id="game-path">
+            <!-- Las casillas se generarán dinámicamente con JavaScript -->
+        </div>
+
+        <!-- Leyenda -->
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color contraseñas"></div>
+                <span>🔐 Contraseñas</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color privacidad"></div>
+                <span>👥 Privacidad</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color navegacion"></div>
+                <span>🌐 Navegación</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color redes-sociales"></div>
+                <span>📱 Redes Sociales</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color special" style="border-color: #ffd700;"></div>
+                <span>✨ Casilla Especial</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color finish"></div>
+                <span>🏁 Meta</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Controles -->
+    <div class="controls">
+        <button class="btn btn-primary" id="start-btn">🚀 Iniciar Misión</button>
+        <button class="btn btn-secondary" id="reset-btn" disabled>🔄 Reiniciar</button>
+        <button class="btn btn-secondary" id="instructions-btn">❓ Manual del Guardián</button>
+    </div>
+</div>
+
+<!-- Modal para preguntas -->
+<div id="question-modal" class="modal">
+    <div class="modal-content">
+        <button class="close-btn" id="close-question-modal">×</button>
+        <div class="question-header">
+            <div id="question-category" class="question-category"></div>
+            <div id="question-zone"></div>
+        </div>
+        <div id="question-text" class="question-text"></div>
+        <div id="scenario-section" class="scenario-viewer" style="display: none;">
+            <div id="scenario-content" class="scenario-content"></div>
+            <div class="scenario-tip">
+                💡 <strong>Piensa bien:</strong> ¿Cuál sería la acción más segura?
+            </div>
+        </div>
+        <div id="answers" class="answers"></div>
+        <div id="explanation" class="explanation"></div>
+    </div>
+</div>
+
+<!-- Modal de instrucciones -->
+<div id="instructions-modal" class="instructions-modal">
+    <div class="instructions-content">
+        <button class="close-btn" id="close-instructions-modal">×</button>
+        <h2 style="text-align: center; margin-bottom: 20px; color: #1a1a4b;">📜 Manual del Guardián</h2>
+        <div style="margin-bottom: 15px;">
+            <h3>🎯 Objetivo del juego</h3>
+            <p>Recorre el tablero respondiendo preguntas sobre seguridad digital para convertirte en un auténtico Ciber-Guardián. ¡Alcanza la casilla 60!</p>
+        </div>
+        <div style="margin-bottom: 15px;">
+            <h3>📝 Cómo jugar</h3>
+            <ol>
+                <li>Haz clic en "Iniciar Misión" para comenzar la aventura.</li>
+                <li>Lanza el dado para avanzar por las casillas del tablero.</li>
+                <li>Cada casilla te presentará una pregunta de ciberseguridad. Responde correctamente para ganar puntos.</li>
+                <li>Algunas casillas especiales te darán recompensas o te impondrán castigos inesperados.</li>
+                <li>Si respondes incorrectamente, se te mostrará una explicación para que aprendas.</li>
+                <li>Tu nivel de seguridad aumentará a medida que ganes más puntos. ¡Conviértete en un Guardián!</li>
+            </ol>
+        </div>
+        <div>
+            <h3>🏆 Sistema de puntos y niveles</h3>
+            <ul>
+                <li><strong>Respuesta correcta:</strong> +5 puntos (pueden ser más con tarjetas de bonus)</li>
+                <li><strong>Respuesta incorrecta:</strong> +0 puntos, pero aprenderás con la explicación.</li>
+                <li><strong>Niveles:</strong>
+                    <ul>
+                        <li>Novato: 0-10 puntos</li>
+                        <li>Aprendiz: 11-25 puntos</li>
+                        <li>Experto: 26-40 puntos</li>
+                        <li>Guardián: 41+ puntos</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div class="cyber-tip" style="margin-top: 20px;">
+            💡 Cada pregunta es una oportunidad para aprender sobre cómo protegerte en el mundo digital. ¡No te rindas!
+        </div>
+    </div>
+</div>
+
+<!-- Modal de tarjetas -->
+<div id="card-modal" class="card-modal">
+    <div class="card-content">
+        <h2 class="card-title" id="card-title">¡Tarjeta Especial!</h2>
+        <div class="card-effect" id="card-effect">
+            Has encontrado una tarjeta especial con efectos en tu juego.
+        </div>
+        <button class="card-close-btn" id="card-close-btn">Continuar</button>
+    </div>
+</div>
+
+<!-- Notificación de nivel -->
+<div id="level-up" class="level-up">
+    ¡Felicidades! Has alcanzado el nivel: <span id="new-level"></span>
+</div>
+
+<!-- Modal de fin de juego -->
+<div id="game-over-modal" class="game-over-modal">
+    <div class="game-over-content">
+        <h2 id="game-over-title">¡Misión Completada!</h2>
+        <p>¡Has llegado al final del tablero!</p>
+        <p>Tu puntuación final:</p>
+        <div class="final-score" id="final-score">0</div>
+        <p>Tu nivel de ciberseguridad:</p>
+        <div class="final-level" id="final-level">Novato</div>
+        <button class="btn btn-primary" id="restart-game-btn">Volver a Jugar</button>
+    </div>
+</div>
+
+<script>
+    // ==================== VARIABLES GLOBALES ====================
+    const TOTAL_CELLS = 60;
+    const POINTS_PER_QUESTION = 5;
+
+    let gameState = {
+        playerPosition: 1,
+        playerScore: 0,
+        gameActive: false,
+        currentQuestion: null,
+        securityLevel: 'Novato',
+        diceRolled: false, // True if dice was just rolled, awaiting action (question/card)
+        diceValue: 0,
+        nextBonus: 1, // Multiplier for next correct answer points
+        autoCorrect: false, // If true, next answer is automatically correct
+        skipTurn: false, // If true, player skips next dice roll
+        previousLevel: 'Novato' // To track level changes
+    };
+
+    // Referencias a elementos del DOM
+    const playerNameEl = document.getElementById('player-name');
+    const playerPositionEl = document.getElementById('player-position');
+    const playerScoreEl = document.getElementById('player-score');
+    const securityLevelEl = document.getElementById('security-level');
+    const gamePathEl = document.getElementById('game-path');
+    const rollDiceBtn = document.getElementById('roll-dice-btn');
+    const diceEl = document.getElementById('dice');
+    const startBtn = document.getElementById('start-btn');
+    const resetBtn = document.getElementById('reset-btn');
+    const instructionsBtn = document.getElementById('instructions-btn');
+
+    const questionModal = document.getElementById('question-modal');
+    const closeQuestionModalBtn = document.getElementById('close-question-modal');
+    const questionCategoryEl = document.getElementById('question-category');
+    const questionZoneEl = document.getElementById('question-zone');
+    const questionTextEl = document.getElementById('question-text');
+    const answersEl = document.getElementById('answers');
+    const explanationEl = document.getElementById('explanation');
+    const scenarioSectionEl = document.getElementById('scenario-section');
+    const scenarioContentEl = document.getElementById('scenario-content');
+
+    const instructionsModal = document.getElementById('instructions-modal');
+    const closeInstructionsModalBtn = document.getElementById('close-instructions-modal');
+
+    const cardModal = document.getElementById('card-modal');
+    const cardTitleEl = document.getElementById('card-title');
+    const cardEffectEl = document.getElementById('card-effect');
+    const cardCloseBtn = document.getElementById('card-close-btn');
+
+    const levelUpNotification = document.getElementById('level-up');
+    const newLevelEl = document.getElementById('new-level');
+
+    const gameOverModal = document.getElementById('game-over-modal');
+    const gameOverTitleEl = document.getElementById('game-over-title');
+    const finalScoreEl = document.getElementById('final-score');
+    const finalLevelEl = document.getElementById('final-level');
+    const restartGameBtn = document.getElementById('restart-game-btn');
+
+
+    // Tarjetas especiales (recompensas y castigos)
+    const specialCards = {
+        rewards: [
+            { 
+                title: "¡BONUS x2!", 
+                effect: "Tu próxima respuesta correcta te da el doble de puntos.", 
+                type: "bonus",
+                action: function() { gameState.nextBonus = 2; }
+            },
+            { 
+                title: "¡BONUS x3!", 
+                effect: "Tu próxima respuesta correcta te da el triple de puntos.", 
+                type: "bonus",
+                action: function() { gameState.nextBonus = 3; }
+            },
+            { 
+                title: "¡AVANCE RÁPIDO!", 
+                effect: "Avanzas 3 casillas adicionales.", 
+                type: "bonus",
+                action: function() {
+                    setTimeout(() => { // Small delay for effect
+                        movePlayer(Math.min(gameState.playerPosition + 3, TOTAL_CELLS));
+                    }, 1000);
+                }
+            },
+            { 
+                title: "¡RESPUESTA SEGURA!", 
+                effect: "Tu próxima pregunta se considera correcta automáticamente.", 
+                type: "bonus",
+                action: function() { gameState.autoCorrect = true; }
+            }
+        ],
+        penalties: [
+            { 
+                title: "¡VIRUS DETECTADO!", 
+                effect: "Retrocedes 2 casillas.", 
+                type: "penalty",
+                action: function() {
+                    setTimeout(() => { // Small delay for effect
+                        movePlayer(Math.max(gameState.playerPosition - 2, 1));
+                    }, 1000);
+                }
+            },
+            { 
+                title: "¡REINICIO DEL SISTEMA!", 
+                effect: "Vuelves a la casilla de inicio (casilla 1).", 
+                type: "penalty",
+                action: function() {
+                    setTimeout(() => { // Small delay for effect
+                        movePlayer(1);
+                    }, 1000);
+                }
+            },
+            { 
+                title: "¡PÉRDIDA DE DATOS!", 
+                effect: "Pierdes 5 puntos de tu puntuación actual.", 
+                type: "penalty",
+                action: function() {
+                    gameState.playerScore = Math.max(gameState.playerScore - 5, 0);
+                    updatePlayerInfo();
+                }
+            },
+            { 
+                title: "¡BLOQUEO TEMPORAL!", 
+                effect: "Pierdes tu próximo turno.", 
+                type: "penalty",
+                action: function() { gameState.skipTurn = true; }
+            }
+        ]
+    };
+
+    // ==================== BASE DE DATOS DE PREGUNTAS ====================
+    const questionDatabase = {
+        // CONTRASEÑAS SEGURAS (Rojo)
+        contraseñas: [
+            {
+                zone: "Contraseñas Seguras",
+                question: "¿Cuál de estas contraseñas es MÁS segura?",
+                options: ["123456", "MiNombre2024", "P@ssw0rd!2024#Segura", "password"],
+                correct: 2,
+                explanation: "Una contraseña segura debe tener al menos 12 caracteres, combinar mayúsculas, minúsculas, números y símbolos, y ser única.",
+                level: "beginner"
+            },
+            {
+                zone: "Contraseñas Seguras",
+                question: "¿Qué debes hacer si sospechas que alguien sabe tu contraseña?",
+                options: ["Ignorarlo, no pasa nada", "Cambiarla inmediatamente en todos los sitios", "Contárselo a mis amigos", "Usar la misma en más sitios"],
+                correct: 1,
+                explanation: "Si crees que tu contraseña está comprometida, cámbiala de inmediato en todas las cuentas donde la uses para protegerte.",
+                level: "beginner"
+            },
+            {
+                zone: "Contraseñas Seguras",
+                question: "¿Es seguro usar la misma contraseña para todas mis cuentas?",
+                options: ["Sí, es más fácil recordarla", "No, si la descubren acceden a todo", "Solo para redes sociales", "Depende de la contraseña"],
+                correct: 1,
+                explanation: "Usar la misma contraseña en múltiples sitios es muy peligroso. Si la descubren, tendrán acceso a todas tus cuentas. ¡Usa contraseñas únicas!",
+                level: "intermediate"
+            },
+            {
+                zone: "Contraseñas Seguras",
+                question: "¿Qué es un gestor de contraseñas y para qué sirve?",
+                options: ["Un juego de ordenador", "Un programa que guarda y genera contraseñas de forma segura", "Una red social", "Un tipo de virus"],
+                correct: 1,
+                explanation: "Un gestor de contraseñas almacena todas tus contraseñas de forma segura, genera contraseñas fuertes y te ayuda a gestionarlas.",
+                level: "intermediate"
+            },
+            {
+                zone: "Contraseñas Seguras",
+                question: "¿Por qué se recomienda la autenticación de dos factores (2FA)?",
+                options: ["Porque es más complicado", "Para aumentar la seguridad de la cuenta", "Solo es útil para cuentas bancarias", "No tiene utilidad real"],
+                correct: 1,
+                explanation: "La 2FA añade una capa extra de seguridad. Además de la contraseña, necesitas un segundo método de verificación (ej. un código a tu móvil).",
+                level: "advanced"
+            },
+            {
+                zone: "Contraseñas Seguras",
+                question: "Si una web te pide tu contraseña actual para cambiarla, ¿qué debes evitar?",
+                options: ["Usar la misma contraseña para la nueva", "Usar una contraseña simple", "Usar una contraseña que ya hayas usado", "Todas las anteriores"],
+                correct: 3,
+                explanation: "Al cambiar una contraseña, siempre crea una nueva, compleja y diferente a las que ya uses, para maximizar la seguridad.",
+                level: "advanced"
+            }
+        ],
+
+        // PRIVACIDAD PERSONAL (Verde)  
+        privacidad: [
+            {
+                zone: "Privacidad Personal",
+                question: "¿Qué información personal NO deberías compartir online con desconocidos?",
+                options: ["Tu color favorito", "Tu dirección de casa o número de teléfono", "Tu comida preferida", "Tu serie favorita"],
+                correct: 1,
+                explanation: "Nunca compartas información personal identificable como tu dirección, teléfono o dónde estudias con personas que no conoces online.",
+                level: "beginner"
+            },
+            {
+                zone: "Privacidad Personal",
+                question: "Si alguien que no conoces te pide tu número de teléfono en internet, ¿qué haces?",
+                options: ["Se lo doy si parece simpático", "No se lo doy y se lo cuento a un adulto de confianza", "Le doy un número falso", "Le pido el suyo primero"],
+                correct: 1,
+                explanation: "Nunca des tu información personal a desconocidos online. Siempre busca el consejo de un adulto de confianza.",
+                level: "beginner",
+                scenario: "Un chico/a que dice tener tu edad te escribe por primera vez en una app de juegos y te pide tu número de teléfono para 'ser mejores amigos'."
+            },
+            {
+                zone: "Privacidad Personal",
+                question: "¿Qué son los datos personales?",
+                options: ["Solo mi nombre completo", "Cualquier información que me identifica o me hace identificable como persona", "Solo mis fotos", "Solo mi edad"],
+                correct: 1,
+                explanation: "Los datos personales incluyen tu nombre, dirección, teléfono, fotos, ubicación, datos biométricos y cualquier información que te identifique directa o indirectamente.",
+                level: "intermediate"
+            },
+            {
+                zone: "Privacidad Personal",
+                question: "¿Por qué es importante revisar y configurar la privacidad de tus redes sociales y apps?",
+                options: ["No es importante", "Para saber qué información tuya pueden ver y usar otros", "Solo si soy mayor de edad", "Para ganar puntos en juegos"],
+                correct: 1,
+                explanation: "La configuración de privacidad te permite controlar quién ve tu contenido, tus publicaciones y qué información personal compartes con las apps y otras personas.",
+                level: "intermediate"
+            },
+            {
+                zone: "Privacidad Personal",
+                question: "¿Qué significa el concepto de 'huella digital' o 'rastro digital'?",
+                options: ["La forma en que uso mi dedo para desbloquear el móvil", "El rastro de datos e información que dejamos al usar internet", "Un programa para dibujar", "La cantidad de likes que tengo"],
+                correct: 1,
+                explanation: "Tu huella digital es el conjunto de información que generas y dejas en internet, incluyendo publicaciones, comentarios, búsquedas y datos de uso de apps. Es importante gestionarla.",
+                level: "advanced"
+            },
+            {
+                zone: "Privacidad Personal",
+                question: "¿Qué medida es la más efectiva para proteger tu privacidad al usar Wi-Fi público?",
+                options: ["Conectarse a cualquier red sin preguntar", "Compartir toda mi información con otros", "Usar una Red Privada Virtual (VPN)", "Navegar solo por sitios conocidos"],
+                correct: 2,
+                explanation: "Una VPN (Red Privada Virtual) cifra tu conexión a internet, protegiendo tus datos de posibles intrusos en redes Wi-Fi públicas no seguras.",
+                level: "advanced"
+            }
+        ],
+
+        // NAVEGACIÓN SEGURA (Azul)
+        navegacion: [
+            {
+                zone: "Navegación Segura",
+                question: "¿Cómo puedes saber si una página web es segura antes de introducir datos sensibles?",
+                options: ["Si es bonita y tiene muchas imágenes", "Si tiene un candado 🔒 y empieza por https://", "Si tiene muchos anuncios", "Si carga rápido"],
+                correct: 1,
+                explanation: "Busca siempre el candado cerrado en la barra de direcciones y asegúrate de que la URL empieza por 'https://'. Esto indica que la conexión es segura.",
+                level: "beginner"
+            },
+            {
+                zone: "Navegación Segura",
+                question: "Un enlace te llega por un mensaje de un desconocido, prometiendo un premio. ¿Qué haces?",
+                options: ["Hago clic inmediatamente para reclamar el premio", "Comparto el enlace con mis amigos", "Lo ignoro y lo borro, podría ser 'phishing'", "Lo guardo para verlo después"],
+                correct: 2,
+                explanation: "Muchos ataques de 'phishing' intentan engañarte con premios falsos para robar tus datos. Nunca hagas clic en enlaces sospechosos.",
+                level: "beginner"
+            },
+            {
+                zone: "Navegacion Segura",
+                question: "¿Qué es un 'pop-up' o ventana emergente y cómo debes actuar ante uno sospechoso?",
+                options: ["Un juego divertido", "Una ventana que aparece de repente; ciérrala cuidadosamente o no hagas clic en ella", "Un tipo de virus que debes abrir", "Publicidad inofensiva"],
+                correct: 1,
+                explanation: "Las ventanas emergentes sospechosas a menudo son trampas. Ciérralas con la 'X' o cerrando la pestaña, y nunca hagas clic en ellas.",
+                level: "intermediate"
+            },
+            {
+                zone: "Navegacion Segura",
+                question: "¿Qué son los 'cookies' y por qué las webs te piden aceptarlas?",
+                options: ["Un tipo de galleta virtual", "Pequeños archivos que guardan información sobre tu navegación para mejorar tu experiencia o para publicidad", "Un virus", "Un juego online"],
+                correct: 1,
+                explanation: "Las cookies ayudan a las webs a recordar tus preferencias. Aceptarlas es común, pero siempre es bueno revisar la política de privacidad de cada sitio.",
+                level: "intermediate"
+            },
+            {
+                zone: "Navegacion Segura",
+                question: "¿Qué indica el prefijo 'http' en lugar de 'https' en una dirección web?",
+                options: ["Que la página es antigua", "Que la conexión no es segura y tus datos podrían ser interceptados", "Que es una página muy rápida", "Que es una página de confianza"],
+                correct: 1,
+                explanation: "HTTP (Hypertext Transfer Protocol) no cifra la comunicación, lo que la hace vulnerable. HTTPS (Secure) sí la cifra, protegiendo tus datos.",
+                level: "advanced"
+            },
+            {
+                zone: "Navegacion Segura",
+                question: "¿Cuál es la mejor forma de actuar si, al navegar, aparece una alerta de tu antivirus diciendo que has visitado un sitio peligroso?",
+                options: ["Ignorar la alerta y continuar navegando", "Desactivar el antivirus porque molesta", "Cerrar inmediatamente la ventana y salir de la página", "Reiniciar el ordenador y volver a la misma página"],
+                correct: 2,
+                explanation: "Las alertas de antivirus son importantes. Debes cerrar la página de inmediato y escanear tu dispositivo para asegurarte de que no haya sido afectado.",
+                level: "advanced"
+            }
+        ],
+
+        // REDES SOCIALES (Naranja)
+        redes_sociales: [
+            {
+                zone: "Redes Sociales",
+                question: "¿Es seguro aceptar a todos los que te mandan una solicitud de amistad en redes sociales?",
+                options: ["Sí, cuantos más amigos mejor", "No, solo a personas que conoces y en quienes confías", "Solo si tienen fotos bonitas", "Depende de la red social"],
+                correct: 1,
+                explanation: "Aceptar a desconocidos puede exponer tu información personal a personas con malas intenciones. Mantén tu círculo de amigos limitado a quienes conoces en la vida real.",
+                level: "beginner"
+            },
+            {
+                zone: "Redes Sociales",
+                question: "¿Qué tipo de fotos NO deberías compartir en redes sociales de forma pública?",
+                options: ["Fotos de tus mascotas", "Fotos que revelan tu ubicación exacta, tu escuela o tu casa", "Fotos de tus dibujos", "Selfies divertidos"],
+                correct: 1,
+                explanation: "Evita compartir fotos que puedan dar pistas sobre dónde vives, estudias o tus rutinas, ya que pueden ser usadas por personas peligrosas.",
+                level: "beginner"
+            },
+            {
+                zone: "Redes Sociales",
+                question: "¿Qué debes hacer si ves a alguien siendo víctima de 'ciberbullying' en una red social?",
+                options: ["Unirme y reírme", "Ignorarlo, no es mi problema", "Reportarlo a la plataforma y apoyar a la víctima", "Compartirlo para que más gente lo vea"],
+                correct: 2,
+                explanation: "Reporta siempre el ciberbullying a la plataforma y busca la manera de apoyar a la víctima. No seas parte del problema.",
+                level: "intermediate"
+            },
+            {
+                zone: "Redes Sociales",
+                question: "¿Cuál es una buena práctica para proteger tu perfil en redes sociales?",
+                options: ["Dejarlo público para que todos lo vean", "Usar tu nombre completo y fecha de nacimiento exactos", "Configurar la privacidad para que solo tus amigos vean tus publicaciones", "Publicar todo sin pensar"],
+                correct: 2,
+                explanation: "Configurar tu perfil como privado y revisar quién puede ver tus publicaciones es fundamental para proteger tu información.",
+                level: "intermediate"
+            },
+            {
+                zone: "Redes Sociales",
+                question: "¿Por qué es peligroso participar en 'retos virales' sin conocer su origen o implicaciones?",
+                options: ["Porque son aburridos", "Pueden ser riesgosos para tu seguridad física o tu privacidad", "Porque mucha gente ya los ha hecho", "No tienen ningún peligro real"],
+                correct: 1,
+                explanation: "Algunos retos virales pueden llevar a situaciones peligrosas en la vida real, exponer información personal o hacerte caer en estafas. Investiga siempre antes de participar.",
+                level: "advanced"
+            },
+            {
+                zone: "Redes Sociales",
+                question: "¿Qué es la 'suplantación de identidad' (impersonation) en redes sociales?",
+                options: ["Cuando alguien usa tu foto de perfil", "Cuando alguien se hace pasar por otra persona para engañar o dañar", "Cuando usas filtros en tus fotos", "Cuando cambias tu nombre de usuario"],
+                correct: 1,
+                explanation: "La suplantación de identidad es cuando una persona se hace pasar por otra, a menudo para obtener información o dañar su reputación. Siempre verifica la autenticidad de los perfiles.",
+                level: "advanced"
+            }
+        ],
+        // Email & Phishing (Añadiré algunas preguntas de ejemplo)
+        email_phishing: [
+            {
+                zone: "Email & Phishing",
+                question: "¿Qué NO debes hacer si recibes un correo electrónico de un banco desconocido que te pide tus datos personales?",
+                options: ["Responder con mis datos inmediatamente", "Verificar la dirección del remitente", "No hacer clic en enlaces sospechosos", "Borrar el correo"],
+                correct: 0,
+                explanation: "Los bancos y empresas legítimas NUNCA te pedirán información personal sensible por correo electrónico. Es casi seguro un intento de 'phishing'.",
+                level: "beginner"
+            },
+            {
+                zone: "Email & Phishing",
+                question: "¿Qué es el 'phishing'?",
+                options: ["Un tipo de pesca", "Una técnica de engaño para obtener información confidencial haciéndose pasar por una entidad de confianza", "Un programa para editar fotos", "Una forma de jugar online"],
+                correct: 1,
+                explanation: "El phishing es una estafa online donde los atacantes intentan robar tus datos (contraseñas, datos bancarios) haciéndose pasar por organizaciones legítimas.",
+                level: "intermediate"
+            },
+            {
+                zone: "Email & Phishing",
+                question: "Recibes un email de un amigo que te pide dinero URGENTE, pero el tono no parece suyo. ¿Qué haces?",
+                options: ["Le envío el dinero inmediatamente", "Lo ignoro", "Intento contactar a mi amigo por otro medio (teléfono, mensaje) para confirmar", "Reenvío el correo a otros amigos"],
+                correct: 2,
+                explanation: "Podría ser que la cuenta de tu amigo haya sido comprometida. Siempre verifica la información por otro medio antes de actuar.",
+                level: "advanced"
+            }
+        ],
+        // Gaming Responsable (Añadiré algunas preguntas de ejemplo)
+        gaming_responsable: [
+            {
+                zone: "Gaming Responsable",
+                question: "¿Qué debes hacer si un desconocido en un juego online te pide información personal como tu nombre completo o dirección?",
+                options: ["Dársela, así pueden ser mejores amigos", "Decir que no y no compartir información personal", "Inventar información falsa", "Bloquearlo inmediatamente"],
+                correct: 1, // Changed to 1 as giving false info can also be risky, blocking is a good step after refusing.
+                explanation: "Nunca compartas información personal identificable con desconocidos en juegos online. Es importante proteger tu identidad.",
+                level: "beginner"
+            },
+            {
+                zone: "Gaming Responsable",
+                question: "¿Por qué es importante usar contraseñas fuertes y únicas para tus cuentas de juegos?",
+                options: ["Para que nadie te gane", "Para proteger tus progresos, compras y datos personales de ser robados", "No es importante, solo son juegos", "Para molestar a otros jugadores"],
+                correct: 1,
+                explanation: "Tus cuentas de juego pueden contener mucha información personal y de pago. Protegerlas con contraseñas fuertes es esencial.",
+                level: "intermediate"
+            },
+            {
+                zone: "Gaming Responsable",
+                question: "Un jugador te insulta o te acosa repetidamente en un juego online. ¿Cuál es la mejor acción?",
+                options: ["Devolverle los insultos", "Ignorarlo y esperar que pare", "Reportar al jugador a los moderadores del juego y bloquearlo", "Dejar de jugar para siempre"],
+                correct: 2,
+                explanation: "No toleres el acoso. Usa las herramientas de reporte y bloqueo del juego. Si persiste, habla con un adulto de confianza.",
+                level: "advanced"
+            }
+        ]
+    };
+
+    // Keep track of asked questions to avoid repetition
+    const askedQuestions = {
+        contraseñas: [], privacidad: [], navegacion: [], redes_sociales: [], email_phishing: [], gaming_responsable: []
+    };
+
+    // Map categories to their CSS classes
+    const categoryClasses = {
+        contraseñas: 'contraseñas',
+        privacidad: 'privacidad',
+        navegacion: 'navegacion',
+        redes_sociales: 'redes-sociales',
+        email_phishing: 'email-phishing', // Though not explicitly styled, good to keep
+        gaming_responsable: 'gaming-responsable' // Same
+    };
+
+    const levelPoints = {
+        'Novato': 0,
+        'Aprendiz': 11,
+        'Experto': 26,
+        'Guardián': 41
+    };
+
+    const levelNames = ['Novato', 'Aprendiz', 'Experto', 'Guardián'];
+
+    // ==================== FUNCIONES DE JUEGO ====================
+
+    function initGame() {
+        gameState.playerScore = 0;
+        gameState.playerPosition = 1;
+        gameState.gameActive = false;
+        gameState.diceRolled = false;
+        gameState.diceValue = 0;
+        gameState.nextBonus = 1;
+        gameState.autoCorrect = false;
+        gameState.skipTurn = false;
+        gameState.securityLevel = 'Novato';
+        gameState.previousLevel = 'Novato';
+        resetAskedQuestions();
+        updatePlayerInfo();
+        generateBoard();
+        
+        startBtn.disabled = false;
+        resetBtn.disabled = true;
+        rollDiceBtn.disabled = true;
+        diceEl.textContent = '?';
+        
+        hideAllModals();
+    }
+
+    function resetAskedQuestions() {
+        for (const category in askedQuestions) {
+            askedQuestions[category] = [];
+        }
+    }
+
+    function updatePlayerInfo() {
+        playerPositionEl.textContent = gameState.playerPosition;
+        playerScoreEl.textContent = gameState.playerScore;
+        
+        const oldLevel = gameState.securityLevel;
+        checkSecurityLevel();
+        securityLevelEl.textContent = gameState.securityLevel;
+        securityLevelEl.className = `value security-level level-${gameState.securityLevel.toLowerCase()}`;
+
+        if (gameState.gameActive && oldLevel !== gameState.securityLevel && gameState.securityLevel !== 'Novato') {
+            showLevelUpNotification(gameState.securityLevel);
+        }
+    }
+
+    function checkSecurityLevel() {
+        let newLevel = 'Novato';
+        if (gameState.playerScore >= levelPoints['Guardián']) {
+            newLevel = 'Guardián';
+        } else if (gameState.playerScore >= levelPoints['Experto']) {
+            newLevel = 'Experto';
+        } else if (gameState.playerScore >= levelPoints['Aprendiz']) {
+            newLevel = 'Aprendiz';
+        }
+        gameState.securityLevel = newLevel;
+    }
+
+    function showLevelUpNotification(level) {
+        newLevelEl.textContent = level;
+        levelUpNotification.style.display = 'block';
+        levelUpNotification.className = `level-up level-${level.toLowerCase()}`;
+        setTimeout(() => {
+            levelUpNotification.style.display = 'none';
+        }, 2000); // Display for 2 seconds
+    }
+
+    function generateBoard() {
+        gamePathEl.innerHTML = ''; // Clear existing board
+        const categories = Object.keys(questionDatabase);
+        let categoryIndex = 0;
+
+        for (let i = 1; i <= TOTAL_CELLS; i++) {
+            const cell = document.createElement('div');
+            cell.classList.add('cell');
+            cell.id = `cell-${i}`;
+            cell.textContent = i;
+
+            if (i === TOTAL_CELLS) {
+                cell.classList.add('finish');
+            } else if ([10, 20, 30, 40, 50, 55].includes(i)) {
+                cell.classList.add('special'); // Special card cells
+            } else {
+                const categoryName = categories[categoryIndex % categories.length];
+                cell.classList.add(categoryClasses[categoryName]);
+                cell.dataset.category = categoryName;
+                categoryIndex++;
+            }
+            
+            gamePathEl.appendChild(cell);
+        }
+        updatePlayerPositionOnBoard();
+    }
+
+    function updatePlayerPositionOnBoard() {
+        const cells = document.querySelectorAll('.cell');
+        cells.forEach(cell => cell.classList.remove('active'));
+        
+        const currentCell = document.getElementById(`cell-${gameState.playerPosition}`);
+        if (currentCell) {
+            currentCell.classList.add('active');
+            // Remove existing token and add a new one
+            const existingToken = document.querySelector('.player-token');
+            if (existingToken) existingToken.remove();
+            
+            const playerToken = document.createElement('div');
+            playerToken.classList.add('player-token');
+            playerToken.textContent = '🚀'; // Player icon
+            currentCell.appendChild(playerToken);
+        }
+    }
+
+    function rollDice() {
+        if (!gameState.gameActive || gameState.diceRolled) return;
+
+        rollDiceBtn.disabled = true; // Disable button during roll
+        diceEl.textContent = ''; // Clear dice display
+        let rollCount = 0;
+        const rollInterval = setInterval(() => {
+            diceEl.textContent = Math.floor(Math.random() * 6) + 1;
+            rollCount++;
+            if (rollCount > 10) { // Simulate rolling for a short time
+                clearInterval(rollInterval);
+                const diceResult = Math.floor(Math.random() * 6) + 1;
+                diceEl.textContent = diceResult;
+                gameState.diceValue = diceResult;
+                movePlayer(gameState.playerPosition + diceResult);
+            }
+        }, 100);
+    }
+
+    function movePlayer(newPosition) {
+        const oldPosition = gameState.playerPosition;
+        gameState.playerPosition = Math.min(newPosition, TOTAL_CELLS);
+        updatePlayerInfo(); // Update position display immediately
+        
+        // Animation for movement (optional, but nice)
+        const animationSteps = Math.abs(gameState.playerPosition - oldPosition);
+        let currentAnimatedPosition = oldPosition;
+        const playerToken = document.querySelector('.player-token'); // Get the token
+
+        const moveInterval = setInterval(() => {
+            // Clear active class from previous cell
+            const prevCell = document.getElementById(`cell-${currentAnimatedPosition}`);
+            if (prevCell) prevCell.classList.remove('active');
+
+            if (currentAnimatedPosition < gameState.playerPosition) {
+                currentAnimatedPosition++;
+            } else if (currentAnimatedPosition > gameState.playerPosition) {
+                currentAnimatedPosition--;
+            }
+
+            const targetCell = document.getElementById(`cell-${currentAnimatedPosition}`);
+            if (targetCell) {
+                targetCell.classList.add('active');
+                // Move the actual token element
+                if (playerToken) {
+                    targetCell.appendChild(playerToken);
+                }
+            }
+
+            if (currentAnimatedPosition === gameState.playerPosition) {
+                clearInterval(moveInterval);
+                setTimeout(handleCellAction, 500); // Small delay before action
+            }
+        }, 300); // Speed of animation between cells
+    }
+
+    function handleCellAction() {
+        if (gameState.playerPosition === TOTAL_CELLS) {
+            endGame(true); // Player reached the end
+            return;
+        }
+
+        const currentCell = document.getElementById(`cell-${gameState.playerPosition}`);
+        if (currentCell.classList.contains('special')) {
+            triggerSpecialCard();
+        } else {
+            showQuestionForCurrentCell();
+        }
+    }
+
+    function triggerSpecialCard() {
+        rollDiceBtn.disabled = true; // Ensure dice button is disabled during card event
+
+        let cardList = [];
+        if (Math.random() < 0.6) { // 60% chance of penalty, 40% chance of reward
+            cardList = specialCards.penalties;
+        } else {
+            cardList = specialCards.rewards;
+        }
+
+        const card = cardList[Math.floor(Math.random() * cardList.length)];
+        showCardModal(card);
+    }
+
+    function showCardModal(card) {
+        cardModal.style.display = 'flex';
+        cardTitleEl.textContent = card.title;
+        cardEffectEl.textContent = card.effect;
+        cardEffectEl.className = `card-effect ${card.type}-card`; // Apply bonus/penalty style
+
+        cardCloseBtn.onclick = () => {
+            cardModal.style.display = 'none';
+            card.action(); // Apply the card's effect
+            // After card action, re-enable dice if game is still active and not skipping turn
+            if (gameState.gameActive && !gameState.skipTurn) {
+                rollDiceBtn.disabled = false;
+            } else if (gameState.skipTurn) {
+                alert("¡Turno perdido! No puedes lanzar el dado en este turno.");
+                gameState.skipTurn = false; // Reset after one turn
+                rollDiceBtn.disabled = false;
+            }
+        };
+    }
+
+    function getQuestion(category) {
+        let availableQuestions = questionDatabase[category].filter(q => !askedQuestions[category].includes(q));
+
+        if (availableQuestions.length === 0) {
+            // If all questions in this category have been asked, reset them
+            askedQuestions[category] = [];
+            availableQuestions = questionDatabase[category];
+        }
+
+        const randomIndex = Math.floor(Math.random() * availableQuestions.length);
+        const question = availableQuestions[randomIndex];
+        askedQuestions[category].push(question); // Mark as asked
+        return question;
+    }
+
+    function showQuestionForCurrentCell() {
+        const currentCell = document.getElementById(`cell-${gameState.playerPosition}`);
+        const category = currentCell.dataset.category;
+        const question = getQuestion(category);
+        gameState.currentQuestion = question;
+
+        questionModal.style.display = 'flex';
+        questionCategoryEl.textContent = `Categoría: ${question.zone}`;
+        questionCategoryEl.className = `question-category ${categoryClasses[category]}`; // Apply color
+        questionTextEl.textContent = question.question;
+        answersEl.innerHTML = '';
+        explanationEl.style.display = 'none'; // Hide explanation initially
+
+        if (question.scenario) {
+            scenarioContentEl.textContent = question.scenario;
+            scenarioSectionEl.style.display = 'block';
+        } else {
+            scenarioSectionEl.style.display = 'none';
+        }
+
+        question.options.forEach((option, index) => {
+            const button = document.createElement('button');
+            button.classList.add('answer-btn');
+            button.textContent = option;
+            button.onclick = () => checkAnswer(index, question);
+            answersEl.appendChild(button);
+        });
+    }
+
+    function checkAnswer(selectedIndex, question) {
+        // Disable all answer buttons after selection
+        Array.from(answersEl.children).forEach(btn => btn.disabled = true);
+
+        const isCorrect = (selectedIndex === question.correct) || gameState.autoCorrect;
+        
+        const explanationText = question.explanation;
+        explanationEl.textContent = explanationText;
+        explanationEl.style.display = 'block';
+
+        if (isCorrect) {
+            answersEl.children[selectedIndex].classList.add('correct');
+            let pointsEarned = POINTS_PER_QUESTION * gameState.nextBonus;
+            gameState.playerScore += pointsEarned;
+            alert(`¡Correcto! Has ganado ${pointsEarned} puntos.`);
+        } else {
+            answersEl.children[selectedIndex].classList.add('incorrect');
+            answersEl.children[question.correct].classList.add('correct'); // Highlight correct answer
+            alert("¡Incorrecto! Aprende de tu error.");
+        }
+        
+        gameState.nextBonus = 1; // Reset bonus multiplier
+        gameState.autoCorrect = false; // Reset auto-correct
+
+        updatePlayerInfo();
+
+        // Allow closing modal after a short delay to read explanation
+        setTimeout(() => {
+            closeQuestionModalBtn.style.display = 'block'; // Show close button
+        }, 1500); 
+    }
+
+    function closeQuestionModal() {
+        questionModal.style.display = 'none';
+        // Reset buttons state for next question
+        Array.from(answersEl.children).forEach(btn => {
+            btn.classList.remove('correct', 'incorrect');
+            btn.disabled = false;
+        });
+        explanationEl.style.display = 'none';
+        closeQuestionModalBtn.style.display = 'none'; // Hide close button for next time
+        
+        // Re-enable dice button if game is active
+        if (gameState.gameActive && !gameState.skipTurn) {
+            rollDiceBtn.disabled = false;
+        } else if (gameState.skipTurn) {
+            alert("¡Turno perdido! No puedes lanzar el dado en este turno.");
+            gameState.skipTurn = false; // Reset after one turn
+            rollDiceBtn.disabled = false;
+        }
+    }
+
+    function startGame() {
+        if (gameState.gameActive) return;
+        gameState.gameActive = true;
+        startBtn.disabled = true;
+        resetBtn.disabled = false;
+        rollDiceBtn.disabled = false;
+        initGame(); // Re-initialize game state, board etc.
+        alert("¡Misión iniciada! Lanza el dado para comenzar.");
+    }
+
+    function resetGame() {
+        if (!confirm('¿Estás seguro de que quieres reiniciar el juego?')) {
+            return;
+        }
+        initGame();
+        alert("Juego reiniciado.");
+    }
+
+    function endGame(won) {
+        gameState.gameActive = false;
+        rollDiceBtn.disabled = true;
+        startBtn.disabled = false; // Allow starting a new game
+        
+        gameOverModal.style.display = 'flex';
+        if (won) {
+            gameOverTitleEl.textContent = "¡CIBER-GUARDIÁN COMPLETO!";
+            gameOverTitleEl.style.color = '#48bb78';
+        } else {
+            // This path might be less common if the only win condition is reaching the end
+            // But good to have a general "game over"
+            gameOverTitleEl.textContent = "¡Misión Finalizada!";
+            gameOverTitleEl.style.color = '#e53e3e';
+        }
+        finalScoreEl.textContent = gameState.playerScore;
+        finalLevelEl.textContent = gameState.securityLevel;
+    }
+
+    function restartFromGameOver() {
+        gameOverModal.style.display = 'none';
+        initGame();
+    }
+
+    function showInstructions() {
+        instructionsModal.style.display = 'flex';
+    }
+
+    function closeInstructions() {
+        instructionsModal.style.display = 'none';
+    }
+
+    function hideAllModals() {
+        questionModal.style.display = 'none';
+        instructionsModal.style.display = 'none';
+        cardModal.style.display = 'none';
+        gameOverModal.style.display = 'none';
+    }
+
+    // ==================== EVENT LISTENERS ====================
+    rollDiceBtn.addEventListener('click', rollDice);
+    startBtn.addEventListener('click', startGame);
+    resetBtn.addEventListener('click', resetGame);
+    instructionsBtn.addEventListener('click', showInstructions);
+    closeInstructionsModalBtn.addEventListener('click', closeInstructions);
+    closeQuestionModalBtn.addEventListener('click', closeQuestionModal);
+    cardCloseBtn.addEventListener('click', () => cardModal.style.display = 'none'); // Handled within showCardModal now
+    restartGameBtn.addEventListener('click', restartFromGameOver);
+
+    // Initialize the game when the page loads
+    document.addEventListener('DOMContentLoaded', initGame);
+
+</script>
